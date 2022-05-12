@@ -8,7 +8,11 @@ module.exports = {
     "./templates/customers/*liquid"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        raleway:["raleway"]
+      }
+    },
   },
   plugins: [],
 };
