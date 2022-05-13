@@ -10,19 +10,30 @@
   {{ content_for_header }} <!-- Header hook for plugins -->
   {{ 'tailwind.css' | asset_url | stylesheet_tag }}
   {{ 'application.js' | asset_url | script_tag }}
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
   
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+
 </head>
-<body class="bg-gray-500 px-10 py-20 mx-auto font-raleway">
+<body class="bg-white px-10 py-20 mx-auto font-raleway">
+{% section 'header' %}
 
-  <header>Header</header>
-  <h2>Body</h2>
+  <header class="text-white">Header</header>
+  <h2 class="text-white">Body</h2>
 
-  <footer>Footer</footer>
+  <footer class="text-white">Fowoter</footer>
 
   
 
   <main role="main">
     {{ content_for_layout }}
   </main>
+
+
+  
 </body>
 </html>
