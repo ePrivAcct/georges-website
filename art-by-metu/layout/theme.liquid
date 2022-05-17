@@ -19,14 +19,20 @@
   </style>
 
 </head>
-<body class="bg-purple-700 px-10 py-20 mx-auto font-raleway">
-{% section 'header' %}
+<body class="bg-black px-4 py-3 mx-auto font-raleway md:px-10">
 
-  <header class="text-blue-600">Header</header>
-  <h2 class="text-white">Body</h2>
+  {% if template.name == 'index' %}
+    {% section 'homepage-header' %}
+  {% endif %}
   
+{% if template.name != 'index' %}
+  {% section 'header' %}
+{% endif %}
 
-  <footer class="text-blue-600">Fowoter</footer>
+
+
+
+
 
   
 

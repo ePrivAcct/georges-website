@@ -8,26 +8,30 @@
 {% assign main_menu_linklist = section.settings.menu.links %}
 {% endif %}
 
-<div class="relative" x-data="{ mobileMenuOpen: false, searchBarOpen: false }" x-cloak>
+<div class="relative" x-data="{ mobileMenuOpen: false, searchBarOpen: false, navBarOpen: false }" x-cloak>
     <div class="relative pt-2 ">
         <div class="mx-auto px-4 sm:px-6">
             <div class="flex justify-between items-center pt-2 pb-2 md:justify-start md:space-x-10 -mt-2 ">
 
                 <div class="flex justify-between items-center -ml-1">
                     <!------STORE NAME/LOGO------>
-                     <div class="flex justify-start lg:flex-1 truncate">
-                    <a href="/">
-                      <img src="/assets/g-logo.png" alt="logo" class="w-20 md:w-28">
-                    </a>
-                            
-                  </div>
+                    <div class="flex justify-start lg:flex-1 truncate text-pink-200 items-center" >
+                    {% comment %} <a href="/">
+                    <h1 class="text-3xl truncate tracking-wide text-pink-500"> <!-- {{shop.name}} --> metu</h1>
+                     </a> {% endcomment %}
+                     
+                        <button x-on:click="navBarOpen = true" class="text-3xl text-pink-200 truncate flex items-center tracking-wide -mt-1 " type="button">
+                                {% comment %} {% render "chevron-right"%} {% endcomment %}
+                                <img src="/assets/g-logo.png" alt="logo" class="w-20 md:w-28">
+                        </button>
 
+                    </div>
 
 
 
                     <!------NAVIGATION MENU------->
 
-                    <nav class="hidden md:flex space-x-10 lowercase ml-5 z-10">
+                    <nav class="hidden md:flex space-x-10 lowercase ml-5 z-10" x-show="navBarOpen">
                         {% for link in main_menu_linklist %}
                         {% if link.links !=blank%}
                         {% assign link_handle = link.handle | replace: '-' , '_'%}
@@ -67,7 +71,9 @@
                         {% else %}
                         <a href="{{ link.url }}" class="text-sm text-pink-200 hover:text-white">{{ link.title }}</a>
                         {% endif %} {% endfor %}
-                       
+                        <button x-on:click="navBarOpen = false" class="text-pink-200 " type="button">
+                                {%render 'chevron-left'%}
+                        </button>
                     </nav>
                     
 
