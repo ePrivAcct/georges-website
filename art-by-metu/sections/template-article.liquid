@@ -1,0 +1,139 @@
+<article class="md:pt-5">
+    {% for block in section.blocks %}
+        {% case block.type %}
+            {% when 'article_title' %}
+                <div class="grid grid-cols-1 py-5 md:flex justify-between md:px-14 xl:px-24">
+           
+                        <h1 class="text-white text-3xl py-5 lowercase md:text-[100px] ">{{article.title}}</h1>
+                    {% when 'featured_image' %}
+                        <img src="{{article.image | img_url: '800x800'}}" alt="{{article.image.alt}}" class=" md:pr-5">
+                 </div>    
+             
+                 {% when 'article_author' %}
+                     <div class="py-3 md:px-14">
+                        {% if section.settings.enable_author %}
+                             <small class="text-white">{{article.author}}</small> 
+                        {% endif %}
+                {% when 'published_date' %}
+                        {% if section.settings.enable_published_date %}
+                    |       <time datetme="{{article.published_at | date: '%Y-%m-%d'}}" class="text-white text-xs">{{article.published_at | date: '%Y-%m-%d'}}</time>  
+                        {% endif %} 
+                    </div>
+           
+                <div class="md:px-14 xl:px-24">
+                    {% when 'article_content' %}
+                <div class="text-white">{{article.content}}</div>
+                </div>
+            
+            {% else %}
+            
+        {% endcase %}
+        
+    {% endfor %}
+</article>
+ <hr class="mt-14 text-gray-500 w-32 md:w-48 text-center">
+
+{% if blog.comments_enabled? %}
+    <div id="comments" class="my-8 lowercase">
+        {% if article.comments_count > 0 %}
+           <div class="flex-1 items-center justify-center mx-auto md:w-1/2 md:px-4">
+               <h1 class="text-lg mb-6 font-medium text-white md:px-4">comments</h1>
+               {% paginate article.comments by 5 %}
+                   {% for comment in article.comments %}
+                       <div class="flex-1 border-t-2 border-white my-4 px-4 py-2 leading-relaxed text-white">
+                           <span class="comment-author">{{comment.author}}</span> <span class="text-xs text-white">{{comment.created_at | date: format: 'default'}}</span>
+                           <p class="text-small text-white">{{comment.content}}</p>
+                       </div>
+                   {% endfor %}
+
+                   {% if paginate.pages > 1 %}
+                       {{paginate | default_pagination}}
+                   {% endif %}
+               {% endpaginate %}
+           </div>
+        {% endif %}
+    </div>
+    <div id="comment_form" class="mb-8 text-white mt-14 md:mt-28">
+
+        {%form 'new_comment', article %}
+            <div class="flex-1 mx-auto items-center justify-center max-w-4xl  text-white">
+
+                {% if form.errors %}
+                        sorry, your comment was not posted 
+                    {% elsif posted.successfully? %}
+                        your comment has been posted successfully.
+                {% endif %}
+
+                <div class="px-1 md:flex mb-3">
+                    <div class="md:px-3 md:w-1/2">
+                        <input type="text" name="comment[author]" id="comment_author" placeholder="name" class="bg-transparent text-white w-full  py-3 border-b-2 border-white mb-3 focus:outline-none" required>
+                    </div>
+                    <div class="md:px-3 md:w-1/2">
+                        <input type="email" name="comment[email]" id="comment_email" placeholder="email" class="bg-transparent text-white w-full  py-3 border-b-2 border-white mb-3 focus:outline-none" required>
+                    </div>
+                </div>
+                <div class="px-1 md:flex mb-3">
+                    <div class="md:w-full md:px-3">
+                        <input type="text" name="comment[body]" id="comment_body" placeholder="comment" class="bg-transparent text-white w-full  py-3 border-b-2 border-white mb-3 focus:outline-none" required>
+                    </div>
+                </div>
+                <div class="px-1 md:flex mb-3">
+                    <div class="md:w-full md:px-3 mt-5">
+                        <input type="submit" value="post comment" class="w-full cursor-crosshair px-4 py-3 border-2 border-white text-white hover:text-gray-400">
+                    </div>
+                </div>
+            </div>
+
+        {%endform%}
+    </div>
+{% endif %}
+
+
+
+{% schema %}
+{
+    "name": "Template Article",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable_author",
+            "default": false,
+            "label": "Display Author"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_published_date",
+            "default": false,
+            "label": "Display Published Date"
+        }
+    ],
+
+    "blocks": [
+        {
+            "type": "article_title",
+            "name": "Title",
+            "limit": 1
+        },
+        {
+            "type": "article_author",
+            "name": "Author",
+            "limit": 1
+        },
+        {
+            "type": "published_date",
+            "name": "Published Date",
+            "limit": 1
+        },
+        {
+            "type": "featured_image",
+            "name": "Thumbnail",
+            "limit": 1
+        },
+        {
+            "type": "article_content",
+            "name": "Content",
+            "limit": 1
+        }
+    ]
+}
+{% endschema %}
